@@ -8,9 +8,13 @@ import { DateInput } from "@mantine/dates";
 import axios, { AxiosResponse } from "axios";
 import Swal from "sweetalert2";
 
+import { useMediaQuery } from "@mantine/hooks";
+
 const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 const ModalAddDokter = () => {
+  const isSmallScreen = useMediaQuery("(max-width: 640px)");
+
   const [opened, { open, close }] = useDisclosure(false);
   const [tglLahir, setTglLahir] = useState<Date | null>(null);
 
@@ -83,7 +87,7 @@ const ModalAddDokter = () => {
         opened={opened}
         onClose={close}
         title="Tambah Dokter"
-        size="50%"
+        size={isSmallScreen ? "100%" : "50%"}
         centered
         overlayProps={{
           backgroundOpacity: 0.55,
@@ -100,7 +104,7 @@ const ModalAddDokter = () => {
           {/* Form */}
           <div className="flex flex-col gap-3">
             {/* NIP */}
-            <div className="flex flex-col text-sm">
+            <div className="flex flex-col text-sm lg:text-sm">
               <label htmlFor="">NIP</label>
               <Input
                 placeholder="NIP"

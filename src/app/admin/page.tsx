@@ -8,9 +8,9 @@ import iconSurat from "@/assets/icons/card-surat.svg";
 const page = () => {
   return (
     <AdminTemplate title="Dashboard">
-      <div className="flex flex-col gap-3 w-full h-full">
+      <div className="flex flex-col gap-1 lg:gap-3 w-full h-full">
         {/* Card */}
-        <div className="flex flex-row px-5 py-2 gap-5 justify-center items-center w-full h-full ">
+        <div className="flex flex-row px-2 lg:px-5 py-2 gap-1 lg:gap-5 justify-center items-center w-full h-full ">
           <CardComponents
             image={iconStetoskop}
             number="2"
@@ -33,7 +33,9 @@ const page = () => {
           />
         </div>
 
-        <div className="bg-white rounded-md shadow-lg px-3 py-2 ">Main</div>
+        <div className="bg-white rounded-md shadow-lg px-3 py-2 text-xs lg:text-lg ">
+          Main
+        </div>
       </div>
     </AdminTemplate>
   );

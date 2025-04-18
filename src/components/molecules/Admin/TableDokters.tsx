@@ -4,6 +4,8 @@ import { Table, Button } from "@mantine/core";
 import axios from "axios";
 import { IconPencilCode, IconTrash } from "@tabler/icons-react";
 import Swal from "sweetalert2";
+import { ScrollArea } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 interface Dokter {
@@ -18,6 +20,8 @@ interface Dokter {
 
 const TableDokters = () => {
   const [dokters, setDokters] = useState<Dokter[]>([]);
+
+  const isSmallScreen = useMediaQuery("(max-width: 640px)");
 
   const handleDelete = async (id: string) => {
     Swal.fire({
@@ -98,20 +102,20 @@ const TableDokters = () => {
 
   const rows = dokters.map((element) => (
     <Table.Tr key={element.id}>
-      <Table.Td>{element.nip}</Table.Td>
-      <Table.Td>{element.nama}</Table.Td>
+      <Table.Td className="truncate">{element.nip}</Table.Td>
+      <Table.Td className="truncate">{element.nama}</Table.Td>
       <Table.Td>{element.status}</Table.Td>
       <Table.Td className="flex flex-row gap-2">
         <Button
-          leftSection={<IconPencilCode size={18} />}
+          leftSection={<IconPencilCode size={isSmallScreen ? 15 : 18} />}
           variant="filled"
           color="#007bff"
-          size="xs"
+          size={"xs"}
         >
-          Edit
+          <span className="text-[.7rem] lg:text-base">Edit</span>
         </Button>
         <Button
-          leftSection={<IconTrash size={18} />}
+          leftSection={<IconTrash size={isSmallScreen ? 15 : 18} />}
           variant="filled"
           color="#dc3545"
           size="xs"
@@ -119,25 +123,35 @@ const TableDokters = () => {
             handleDelete(element.id);
           }}
         >
-          Delete
+          <span className="text-[.7rem] lg:text-base">Delete</span>
         </Button>
       </Table.Td>
     </Table.Tr>
   ));
 
   return (
-    <Table stickyHeader stickyHeaderOffset={60} striped>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th className="w-[35%] lg:w-[25%] ">NIP</Table.Th>
-          <Table.Th className="w-[40%] lg:w-[50%] ">Nama</Table.Th>
-          <Table.Th className="w-[10%] ">Status</Table.Th>
-          <Table.Th className="w-[15%] ">Action</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-      <Table.Caption>Data Dokters</Table.Caption>
-    </Table>
+    <ScrollArea
+      w={isSmallScreen ? 300 : "100%"}
+      h={isSmallScreen ? 300 : "100%"}
+      className=""
+    >
+      <Table
+        stickyHeader
+        // stickyHeaderOffset={60}
+        striped
+      >
+        <Table.Thead className="text-xs lg:text-base">
+          <Table.Tr>
+            <Table.Th className="w-[35%] lg:w-[25%] ">NIP</Table.Th>
+            <Table.Th className="w-[40%] lg:w-[50%] ">Nama</Table.Th>
+            <Table.Th className="w-[10%] ">Status</Table.Th>
+            <Table.Th className="w-[15%] ">Action</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody className="text-xs lg:text-sm">{rows}</Table.Tbody>
+        <Table.Caption>Data Dokters</Table.Caption>
+      </Table>
+    </ScrollArea>
   );
 };
 

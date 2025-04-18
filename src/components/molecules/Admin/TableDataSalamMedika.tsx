@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Table, Button } from "@mantine/core";
 import axios from "axios";
 
+import { ScrollArea } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
+
 import {
   IconPrinter,
   IconTrash,
@@ -36,6 +39,7 @@ type typeSurat = {
 };
 
 const TableDataSalamMedika = () => {
+  const isSmallScreen = useMediaQuery("(max-width: 640px)");
   const [surat, setSurat] = useState<typeSurat[]>([]);
 
   useEffect(() => {
@@ -120,29 +124,29 @@ const TableDataSalamMedika = () => {
 
   const rows = surat.map((data) => (
     <Table.Tr key={data.id}>
-      <Table.Td>{data.no_surat}</Table.Td>
-      <Table.Td>{data.nama_pasien}</Table.Td>
-      <Table.Td>{data.sampai}</Table.Td>
-      <Table.Td>{data.mulai}</Table.Td>
+      <Table.Td className="truncate">{data.no_surat}</Table.Td>
+      <Table.Td className="truncate">{data.nama_pasien}</Table.Td>
+      <Table.Td className="truncate">{data.sampai}</Table.Td>
+      <Table.Td className="truncate">{data.mulai}</Table.Td>
       <Table.Td className="grid grid-cols-1  gap-1">
         <Button
-          leftSection={<IconFileDescription size={18} />}
+          leftSection={<IconFileDescription size={isSmallScreen ? 15 : 18} />}
           variant="filled"
           color="#007bff"
           size="xs"
         >
-          Detail
+          <span className="text-[.7rem] lg:text-base">Detail</span>
         </Button>
         <Button
-          leftSection={<IconPrinter size={18} />}
+          leftSection={<IconPrinter size={isSmallScreen ? 15 : 18} />}
           variant="filled"
           color="#28a745"
           size="xs"
         >
-          Cetak Surat
+          <span className="text-[.7rem] lg:text-base">Cetak Surat</span>
         </Button>
         <Button
-          leftSection={<IconTrash size={18} />}
+          leftSection={<IconTrash size={isSmallScreen ? 15 : 18} />}
           variant="filled"
           color="#dc3545"
           size="xs"
@@ -150,26 +154,32 @@ const TableDataSalamMedika = () => {
             handleDelete(data.id);
           }}
         >
-          Delete
+          <span className="text-[.7rem] lg:text-base">Delete</span>
         </Button>
       </Table.Td>
     </Table.Tr>
   ));
 
   return (
-    <Table stickyHeader stickyHeaderOffset={60}>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th className="w-[15%] ">No Surat</Table.Th>
-          <Table.Th className="w-[25%] ">Nama Pasien</Table.Th>
-          <Table.Th className="w-[15%] ">Mulai</Table.Th>
-          <Table.Th className="w-[15%] ">Sampai</Table.Th>
-          <Table.Th className="w-[15%] ">Action</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>{rows}</Table.Tbody>
-      <Table.Caption>Data Surat Sakit</Table.Caption>
-    </Table>
+    <ScrollArea
+      w={isSmallScreen ? 300 : "100%"}
+      h={isSmallScreen ? 300 : "100%"}
+      className=""
+    >
+      <Table stickyHeader>
+        <Table.Thead className="text-xs lg:text-base">
+          <Table.Tr>
+            <Table.Th className="w-[15%] ">No Surat</Table.Th>
+            <Table.Th className="w-[25%] ">Nama Pasien</Table.Th>
+            <Table.Th className="w-[15%] ">Mulai</Table.Th>
+            <Table.Th className="w-[15%] ">Sampai</Table.Th>
+            <Table.Th className="w-[15%] ">Action</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+        <Table.Caption>Data Surat Sakit</Table.Caption>
+      </Table>
+    </ScrollArea>
   );
 };
 
