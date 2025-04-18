@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Input, PasswordInput } from "@mantine/core";
 import {
   IconMail,
@@ -8,9 +8,16 @@ import {
   IconLock,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const FormLogin = () => {
   const router = useRouter();
+
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const VisibilityToggleIcon = ({ reveal }: { reveal: boolean }) =>
     reveal ? (
@@ -29,15 +36,67 @@ const FormLogin = () => {
       />
     );
 
-  const handleSubmit = () => {
-    console.log("Form Submitted");
+  const handleSubmit = async () => {
+    Swal.fire({
+      title: "Proses Login",
+      text: "Harap Bersabar 😘",
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
-    router.push("/admin");
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_HOST}/login`,
+        {
+          username: username,
+          password: password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      const { success, token, message, userLogin } = response.data;
+
+      if (success) {
+        if (token) {
+          Cookies.set("token", token);
+          Cookies.set("user", userLogin);
+          window.location.href = "/admin";
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Token Tidak Ditemukan",
+          });
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops... Gagal Login",
+          text: message,
+        });
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops... Gagal Login",
+          text: error.response?.data?.message,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Terjadi kesalahan sistem",
+        });
+      }
+    }
   };
+
   return (
     <div className="p-3 flex flex-col gap-3 w-full h-full justify-center broder border-black">
       <div className="header font-monserat flex flex-col gap-2 items-center justify-center">
-        <h1 className=" font-black text-2xl text-sky-400">
+        <h1 className=" font-black text-2xl text-sky-400 text-center">
           Welcome To My Website
         </h1>
         <p className="text-xs">Login with email</p>
@@ -54,8 +113,11 @@ const FormLogin = () => {
         <div className="flex flex-col px-5 md:px-0 gap-2 w-full items-center justify-center">
           <div className="w-full md:w-[70%]">
             <Input
-              placeholder="Your Email"
+              placeholder="Your Username"
               leftSection={<IconMail stroke={2} />}
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
             />
           </div>
           <div className="w-full md:w-[70%]">
@@ -65,6 +127,9 @@ const FormLogin = () => {
               placeholder="Password"
               defaultValue=""
               visibilityToggleIcon={VisibilityToggleIcon}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
           </div>
         </div>
@@ -73,7 +138,8 @@ const FormLogin = () => {
           <p className="text-xs text-blue-500 cursor-pointer">Create Account</p>
           <button
             type="submit"
-            className="w-full font-bold text-xl bg-sky-400 text-white rounded-lg p-2 cursor-pointer"
+            className="w-full font-bold text-xl bg-sky-400 text-white rounded-lg p-2 cursor-pointer "
+            disabled={loading}
           >
             Login
           </button>

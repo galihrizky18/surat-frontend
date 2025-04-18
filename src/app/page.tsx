@@ -7,7 +7,7 @@ export default function Home() {
       <h1>Dashboard</h1>
 
       <Link
-        href={"http://192.168.1.3:3000/login"}
+        href={"http://192.168.1.12:3000/login"}
         className="bg-blue-600 text-white px-10 py-2 w-20"
       >
         Login

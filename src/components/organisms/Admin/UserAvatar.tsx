@@ -2,13 +2,15 @@
 import React from "react";
 import { Popover, Avatar } from "@mantine/core";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 const UserAvatar = () => {
   const router = useRouter();
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
+    const allCookies = Cookies.get();
+    Object.keys(allCookies).forEach((cookieName) => Cookies.remove(cookieName));
     router.push("/login");
   };
   return (
