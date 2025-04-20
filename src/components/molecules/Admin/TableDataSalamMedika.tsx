@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "@mantine/core";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 import { ScrollArea } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
@@ -39,37 +40,52 @@ type typeSurat = {
 };
 
 const TableDataSalamMedika = () => {
+  const token = Cookies.get("token");
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
   const [surat, setSurat] = useState<typeSurat[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      await axios
-        .get(`${apiHost}/surat-salam`, {
+      try {
+        const response = await axios.get(`${apiHost}/surat-salam`, {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        })
-        .then((response) => {
-          if (response.data.success && Array.isArray(response.data.data)) {
-            const convertData = response.data.data.map(
-              (data: typeGetSurat) => ({
-                id: data.id,
-                no_surat: data.no_surat,
-                nama_pasien: data.nama,
-                mulai: data.mulai,
-                sampai: data.sampai,
-                dokter: data.dokters.nama,
-              })
-            );
-
-            setSurat(convertData);
-          }
-        })
-        .catch((e) => {
-          console.error("Error fetching data:", e);
         });
+
+        if (response.data && Array.isArray(response.data.data)) {
+          const convertData = response.data.data.map((data: typeGetSurat) => ({
+            id: data.id,
+            no_surat: data.no_surat,
+            nama_pasien: data.nama,
+            mulai: data.mulai,
+            sampai: data.sampai,
+            dokter: data.dokters.nama,
+          }));
+          setSurat(convertData);
+        } else {
+          console.error("Data tidak ditemukan");
+          Swal.fire({
+            icon: "error",
+            title: "Data Tidak Ditemukan",
+            text: "Tidak ada data yang tersedia.",
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        const errorMessage =
+          axios.isAxiosError(error) && error.response?.data?.message
+            ? error.response.data.message
+            : "Terjadi masalah saat mengambil data. Silakan coba lagi.";
+
+        Swal.fire({
+          icon: "error",
+          title: "Terjadi Kesalahan",
+          text: errorMessage,
+        });
+      }
     };
 
     fetchData();
@@ -91,6 +107,7 @@ const TableDataSalamMedika = () => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
+            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -122,62 +139,119 @@ const TableDataSalamMedika = () => {
     });
   };
 
+  const handleCetak = async (id: bigint) => {
+    try {
+      Swal.fire({
+        title: "Tunggu Sebentar...",
+        text: "Sedang memproses surat, harap tunggu.",
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      const response = await axios.post(
+        `${apiHost}/surat-salam/cetak`,
+        { id: `${id}` },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob", // Menambahkan responseType untuk menangani file PDF
+        }
+      );
+
+      if (response.status === 200) {
+        const blob = response.data;
+        const fileUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = fileUrl;
+        link.download = "surat-salam-medika.pdf";
+        link.click();
+
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Surat berhasil diunduh.",
+          icon: "success",
+          confirmButtonText: "Oke",
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+    } catch (error) {
+      Swal.close();
+
+      if (axios.isAxiosError(error) && error.response) {
+        console.log(error.response.data);
+        Swal.fire({
+          title: "Gagal!",
+          text:
+            error.response.data.message ||
+            "Terjadi kesalahan saat mengunduh surat.",
+          icon: "error",
+          confirmButtonText: "Oke",
+        });
+      } else {
+        console.log("An unexpected error occurred:", error);
+      }
+    }
+  };
+
   const rows = surat.map((data) => (
     <Table.Tr key={data.id}>
       <Table.Td className="truncate">{data.no_surat}</Table.Td>
       <Table.Td className="truncate">{data.nama_pasien}</Table.Td>
       <Table.Td className="truncate">{data.sampai}</Table.Td>
       <Table.Td className="truncate">{data.mulai}</Table.Td>
-      <Table.Td className="grid grid-cols-1  gap-1">
-        <Button
-          leftSection={<IconFileDescription size={isSmallScreen ? 15 : 18} />}
-          variant="filled"
-          color="#007bff"
-          size="xs"
+      <Table.Td className="truncate flex flex-col gap-1 ">
+        <button
+          className="flex items-center gap-1 bg-[#007bff] hover:bg-sky-500 text-white rounded px-2 py-1 lg:py-2 text-[.5rem] lg:text-base hover:cursor-pointer"
+          onClick={() => {}}
         >
+          <IconFileDescription size={isSmallScreen ? 13 : 18} />
           <span className="text-[.7rem] lg:text-base">Detail</span>
-        </Button>
-        <Button
-          leftSection={<IconPrinter size={isSmallScreen ? 15 : 18} />}
-          variant="filled"
-          color="#28a745"
-          size="xs"
+        </button>
+
+        <button
+          className="flex items-center gap-1 bg-[#28a745] hover:bg-green-500 text-white rounded px-2 py-1 g:py-2 text-[.5rem] lg:text-base hover:cursor-pointer"
+          onClick={() => {
+            handleCetak(data.id);
+          }}
         >
+          <IconPrinter size={isSmallScreen ? 13 : 18} />
           <span className="text-[.7rem] lg:text-base">Cetak Surat</span>
-        </Button>
-        <Button
-          leftSection={<IconTrash size={isSmallScreen ? 15 : 18} />}
-          variant="filled"
-          color="#dc3545"
-          size="xs"
+        </button>
+
+        <button
+          className="flex items-center gap-1 bg-[#dc3545] hover:bg-red-500 text-white rounded px-2 py-1 g:py-2 text-[.5rem] lg:text-base hover:cursor-pointer"
           onClick={() => {
             handleDelete(data.id);
           }}
         >
+          <IconTrash size={isSmallScreen ? 13 : 18} />
           <span className="text-[.7rem] lg:text-base">Delete</span>
-        </Button>
+        </button>
       </Table.Td>
     </Table.Tr>
   ));
 
   return (
-    <ScrollArea
-      w={isSmallScreen ? 300 : "100%"}
-      h={isSmallScreen ? 300 : "100%"}
-      className=""
-    >
+    <ScrollArea className="">
       <Table stickyHeader>
-        <Table.Thead className="text-xs lg:text-base">
+        <Table.Thead className="text-[.7rem] lg:text-base">
           <Table.Tr>
-            <Table.Th className="w-[15%] ">No Surat</Table.Th>
-            <Table.Th className="w-[25%] ">Nama Pasien</Table.Th>
+            <Table.Th className="w-[20%] ">No Surat</Table.Th>
+            <Table.Th className="w-[40%] ">Nama Pasien</Table.Th>
             <Table.Th className="w-[15%] ">Mulai</Table.Th>
             <Table.Th className="w-[15%] ">Sampai</Table.Th>
-            <Table.Th className="w-[15%] ">Action</Table.Th>
+            <Table.Th className=" ">Action</Table.Th>
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-        <Table.Caption>Data Surat Sakit</Table.Caption>
+        <Table.Tbody className="text-[.6rem] lg:text-sm">{rows}</Table.Tbody>
       </Table>
     </ScrollArea>
   );

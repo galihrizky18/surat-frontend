@@ -7,10 +7,9 @@ import ModalCreateSalamMedika from "@/components/organisms/Admin/Modal/ModalCrea
 const page = () => {
   return (
     <AdminTemplate title="Surat Salam Medika">
-      <div className="bg-white p-3 flex flex-col gap-1 lg:gap-3 rounded-lg shadow-lg">
+      <div className="bg-white px-2 lg:px-4 py-3 flex flex-col gap-3 rounded-lg shadow-lg">
         {/* Top */}
         <div className="">
-          {" "}
           <ModalCreateSalamMedika />
         </div>
 

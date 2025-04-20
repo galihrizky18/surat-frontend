@@ -12,8 +12,8 @@ export async function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith(path)
   );
 
-  if (isPublicPath) {
-    return NextResponse.next();
+  if (token && isPublicPath) {
+    return NextResponse.redirect(new URL("/admin", request.url)); // redirect ke /admin jika sudah ada token
   }
 
   // Cek jika halaman adalah /admin

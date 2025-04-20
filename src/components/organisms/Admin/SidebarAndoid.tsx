@@ -26,7 +26,7 @@ const SidebarAndoid = () => {
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
   return (
     <>
-      <Drawer opened={opened} onClose={close} size={"70%"}>
+      <Drawer opened={opened} onClose={close} size={"50%"}>
         <div className="w-full h-full bg-white ">
           {/* Header */}
           <Link href="/admin">
@@ -34,10 +34,12 @@ const SidebarAndoid = () => {
               <Image
                 src={SampleLogo}
                 alt="Logo"
-                width={isSmallScreen ? 60 : 70}
+                width={isSmallScreen ? 50 : 70}
               />
 
-              <div className="flex justify-center items-center text-xl font-poppins ">
+              <div
+                className={`flex justify-center items-center text-base font-poppins `}
+              >
                 GARIX KLINIK
               </div>
             </div>
@@ -45,39 +47,43 @@ const SidebarAndoid = () => {
 
           {/* Body */}
           <div className="mt-5 flex flex-col gap-2 ">
-            <MenuBar title="Dashboard" link="/admin" icon={<IconHome2 />} />
+            <MenuBar
+              title="Dashboard"
+              link="/admin"
+              icon={<IconHome2 size={20} />}
+            />
             <MenuCollapse
               title="Master Data"
-              icon={<IconDatabase />}
+              icon={<IconDatabase size={20} />}
               linkInside={["dokter"]}
             >
               <MenuBar
                 title="Dokter"
                 link="/admin/master/dokter"
-                icon={<IconStethoscope />}
+                icon={<IconStethoscope size={20} />}
               />
             </MenuCollapse>
 
             <MenuCollapse
               title="Surat"
-              icon={<IconMailbox />}
+              icon={<IconMailbox size={20} />}
               linkInside={["surat1", "surat2"]}
             >
               <MenuBar
                 title="Salam Medika"
                 link="/admin/salam-medika"
-                icon={<IconMail />}
+                icon={<IconMail size={20} />}
               />
               <MenuBar
                 title="Surat Sakit 2"
                 link="/surat2"
-                icon={<IconMail />}
+                icon={<IconMail size={20} />}
               />
             </MenuCollapse>
             <MenuBar
               title="Laporan"
               link="/admin/report"
-              icon={<IconFileAnalytics />}
+              icon={<IconFileAnalytics size={20} />}
             />
           </div>
         </div>

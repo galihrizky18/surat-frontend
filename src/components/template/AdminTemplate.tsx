@@ -19,7 +19,7 @@ const AdminTemplate: React.FC<AdminTemplateProps> = ({ title, children }) => {
         <SidebarAndoid />
       </div>
 
-      <div className="pl-1 lg:pl-2 w-full flex flex-col gap-1 lg:gap-3 font-poppins ">
+      <div className="pl-1.5 lg:pl-2 w-full flex flex-col gap-2 lg:gap-3 font-poppins ">
         {/* TOP Bar */}
         <div className="flex flex-row justify-between items-center bg-white w-full px-3 lg:px-5 py-1 lg:py-3 rounded-l-md shadow-md ">
           {/* Judul */}
@@ -32,7 +32,7 @@ const AdminTemplate: React.FC<AdminTemplateProps> = ({ title, children }) => {
           </div>
         </div>
 
-        <div className="text-xs">{children}</div>
+        <div className="text-xs ">{children}</div>
       </div>
     </div>
   );

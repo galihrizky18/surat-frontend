@@ -7,6 +7,7 @@ import { IMaskInput } from "react-imask";
 import { DateInput } from "@mantine/dates";
 import axios, { AxiosResponse } from "axios";
 import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -25,6 +26,7 @@ const ModalAddDokter = () => {
   const [status, setStatus] = useState<string>("active");
 
   const handleSubmit = async () => {
+    const token = Cookies.get("token");
     try {
       const response: AxiosResponse = await axios.post(
         `${apiHost}/dokter`,
@@ -40,6 +42,7 @@ const ModalAddDokter = () => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -73,15 +76,13 @@ const ModalAddDokter = () => {
 
   return (
     <>
-      <Button
+      <button
+        className="flex flex-row items-center gap-2 bg-[#28a745] text-white px-2 lg:px-4  py-1 lg:py-2 rounded-sm shadow-md hover:bg-green-500 transition duration-200 ease-in-out "
         onClick={open}
-        leftSection={<IconFolderPlus size={18} />}
-        variant="filled"
-        color="#28a745"
-        size="xs"
       >
-        Tambah Dokter
-      </Button>
+        <IconFolderPlus size={18} />
+        <span className="text-[.6rem] lg:text-sm">Tambah Dokter</span>
+      </button>
 
       <Modal
         opened={opened}
@@ -104,7 +105,7 @@ const ModalAddDokter = () => {
           {/* Form */}
           <div className="flex flex-col gap-3">
             {/* NIP */}
-            <div className="flex flex-col text-sm lg:text-sm">
+            <div className="flex flex-col text-[.8rem] lg:text-sm">
               <label htmlFor="">NIP</label>
               <Input
                 placeholder="NIP"
@@ -112,11 +113,12 @@ const ModalAddDokter = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setNip(e.target.value)
                 }
+                size={isSmallScreen ? "xs" : "sm"}
               />
             </div>
 
             {/* Nama */}
-            <div className="flex flex-col text-sm">
+            <div className="flex flex-col text-[.8rem] lg:text-sm">
               <label htmlFor="">Nama Lengkap</label>
               <Input
                 placeholder="Nama Lengkap"
@@ -124,12 +126,13 @@ const ModalAddDokter = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setNama(e.target.value)
                 }
+                size={isSmallScreen ? "xs" : "sm"}
               />
             </div>
 
             {/* Tempat Lahir & Tanggal Lahir */}
             <div className="grid grid-cols-2 gap-2">
-              <div className=" flex flex-col text-sm">
+              <div className=" flex flex-col text-[.8rem] lg:text-sm">
                 <label htmlFor="">Tempat Lahir</label>
                 <Input
                   placeholder="Tempat Lahir"
@@ -137,10 +140,11 @@ const ModalAddDokter = () => {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setTempatLahir(e.target.value)
                   }
+                  size={isSmallScreen ? "xs" : "sm"}
                 />
               </div>
 
-              <div className="flex flex-col text-sm">
+              <div className="flex flex-col text-[.8rem] lg:text-sm">
                 <label htmlFor="">Tanggal Lahir</label>
                 <DateInput
                   value={tglLahir}
@@ -148,12 +152,13 @@ const ModalAddDokter = () => {
                   placeholder="Tanggal Lahir"
                   clearable
                   defaultValue={new Date()}
+                  size={isSmallScreen ? "xs" : "sm"}
                 />
               </div>
             </div>
 
             {/* No Telpon */}
-            <div className="flex flex-col text-sm">
+            <div className="flex flex-col text-[.8rem] lg:text-sm">
               <label htmlFor="">No Telpon</label>
               <InputBase
                 component={IMaskInput}
@@ -163,15 +168,19 @@ const ModalAddDokter = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setNoTelpon(e.target.value)
                 }
+                size={isSmallScreen ? "xs" : "sm"}
               />
             </div>
           </div>
 
           {/* Button */}
           <div className="">
-            <Button variant="filled" size="sm" type="submit">
-              Simpan
-            </Button>
+            <button
+              className="flex flex-row items-center gap-2 bg-sky-600 text-white px-2 lg:px-4 py-1 lg:py-2 rounded-sm shadow-md hover:bg-sky-500 transition duration-200 ease-in-out "
+              type="submit"
+            >
+              <span className="text-[.8rem] lg:text-sm">Simpan</span>
+            </button>
           </div>
         </form>
       </Modal>
