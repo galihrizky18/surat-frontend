@@ -2,7 +2,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-const notFound = () => {
+const NotFound = () => {
   const router = useRouter();
   const handleBack = () => {
     router.push("/admin");
@@ -23,4 +23,4 @@ const notFound = () => {
   );
 };
 
-export default notFound;
+export default NotFound;

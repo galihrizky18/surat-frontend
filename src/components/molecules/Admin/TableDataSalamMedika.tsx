@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Table, Button } from "@mantine/core";
+import { Table } from "@mantine/core";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -99,7 +99,7 @@ const TableDataSalamMedika = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   const handleDelete = (id: bigint) => {
     Swal.fire({

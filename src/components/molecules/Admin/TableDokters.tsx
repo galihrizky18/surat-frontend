@@ -127,7 +127,7 @@ const TableDokters = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   const rows = dokters.map((element) => (
     <Table.Tr key={element.id} className="">

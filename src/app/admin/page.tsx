@@ -9,7 +9,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import useUserStore from "@/state/zustand/store/userStore";
 
-const page = () => {
+const Page = () => {
   const token = Cookies.get("token");
 
   const role = useUserStore((state) => state.role);
@@ -38,7 +38,7 @@ const page = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   return (
     <AdminTemplate title="Dashboard">
@@ -76,4 +76,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

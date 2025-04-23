@@ -1,7 +1,7 @@
 import AdminTemplate from "@/components/template/AdminTemplate";
 import React from "react";
 
-const page = () => {
+const Page = () => {
   return (
     <AdminTemplate title="Report">
       <h1>Page Report</h1>
@@ -9,4 +9,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

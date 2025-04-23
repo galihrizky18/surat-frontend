@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input, PasswordInput } from "@mantine/core";
 import {
   IconMail,
@@ -19,13 +19,9 @@ const FormLogin = () => {
   const setUserId = useUserStore((state) => state.setUserID);
   const setRole = useUserStore((state) => state.setRole);
 
-  useEffect(() => {
-    setRole("admin");
-  }, []);
-
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
 
   const VisibilityToggleIcon = ({ reveal }: { reveal: boolean }) =>
     reveal ? (

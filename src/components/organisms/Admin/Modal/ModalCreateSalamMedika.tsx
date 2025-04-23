@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { IconPencilPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Input, Radio, Group, Select } from "@mantine/core";
+import { Modal, Input, Radio, Group, Select } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import axios from "axios";
 import Swal from "sweetalert2";

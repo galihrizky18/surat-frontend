@@ -5,7 +5,7 @@ import React from "react";
 import TableDataSalamMedika from "@/components/molecules/Admin/TableDataSalamMedika";
 import ModalCreateSalamMedika from "@/components/organisms/Admin/Modal/ModalCreateSalamMedika";
 
-const page = () => {
+const Page = () => {
   return (
     <AdminTemplate title="Surat Salam Medika">
       <div className="bg-white px-2 lg:px-4 py-3 flex flex-col gap-3 rounded-lg shadow-lg">
@@ -23,4 +23,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

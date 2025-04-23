@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IconFolderPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Input, InputBase } from "@mantine/core";
+import { Modal, Input, InputBase } from "@mantine/core";
 import { IMaskInput } from "react-imask";
 import { DateInput } from "@mantine/dates";
 import axios, { AxiosResponse } from "axios";
@@ -17,7 +17,6 @@ const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 const ModalAddDokter = () => {
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
   const userRole = useUserStore((state) => state.role);
-  const userid = useUserStore((state) => state.userId);
 
   const [opened, { open, close }] = useDisclosure(false);
   const [tglLahir, setTglLahir] = useState<Date | null>(null);
@@ -26,7 +25,7 @@ const ModalAddDokter = () => {
   const [nama, setNama] = useState<string>("");
   const [tempatLahir, setTempatLahir] = useState<string>("");
   const [noTelpon, setNoTelpon] = useState<string>("");
-  const [status, setStatus] = useState<string>("active");
+  const [status] = useState<string>("active");
 
   const handleSubmit = async () => {
     const token = Cookies.get("token");

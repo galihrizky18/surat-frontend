@@ -28,7 +28,7 @@ const MenuCollapse: React.FC<MenuBarProps> = ({
     } else {
       close();
     }
-  }, []);
+  }, [linkInside, path]);
 
   return (
     <>

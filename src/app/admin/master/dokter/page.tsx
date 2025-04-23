@@ -5,7 +5,7 @@ import React from "react";
 import TableDokters from "@/components/molecules/Admin/TableDokters";
 import ModalAddDokter from "@/components/organisms/Admin/Modal/ModalAddDokter";
 
-const page = () => {
+const Page = () => {
   return (
     <AdminTemplate title="Master Data - Dokter">
       <div className="bg-white px-2 lg:px-4 py-3 flex flex-col gap-3 rounded-lg shadow-lg ">
@@ -23,4 +23,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

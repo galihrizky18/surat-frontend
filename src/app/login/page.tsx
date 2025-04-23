@@ -1,7 +1,7 @@
 import React from "react";
 import LoginTemplate from "@/components/template/LoginTemplate";
 
-const page = () => {
+const Page = () => {
   return (
     <div className="w-screen h-screen">
       <LoginTemplate />
@@ -9,4 +9,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

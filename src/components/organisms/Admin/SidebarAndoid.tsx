@@ -16,8 +16,7 @@ import MenuCollapse from "@/components/molecules/Admin/MenuCollapse";
 import Link from "next/link";
 
 import { useDisclosure } from "@mantine/hooks";
-import { Drawer, Button } from "@mantine/core";
-import { usePathname } from "next/navigation";
+import { Drawer } from "@mantine/core";
 
 import { useMediaQuery } from "@mantine/hooks";
 
