@@ -13,6 +13,7 @@ import {
   IconFileDescription,
 } from "@tabler/icons-react";
 import Swal from "sweetalert2";
+import useUserStore from "@/state/zustand/store/userStore";
 
 const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
@@ -42,6 +43,7 @@ type typeSurat = {
 const TableDataSalamMedika = () => {
   const token = Cookies.get("token");
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
+  const userRole = useUserStore((state) => state.role);
   const [surat, setSurat] = useState<typeSurat[]>([]);
 
   useEffect(() => {
@@ -60,8 +62,16 @@ const TableDataSalamMedika = () => {
             id: data.id,
             no_surat: data.no_surat,
             nama_pasien: data.nama,
-            mulai: data.mulai,
-            sampai: data.sampai,
+            mulai: new Date(data.mulai).toLocaleDateString("id-ID", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            }),
+            sampai: new Date(data.sampai).toLocaleDateString("id-ID", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            }),
             dokter: data.dokters.nama,
           }));
           setSurat(convertData);
@@ -203,17 +213,25 @@ const TableDataSalamMedika = () => {
 
   const rows = surat.map((data) => (
     <Table.Tr key={data.id}>
-      <Table.Td className="truncate">{data.no_surat}</Table.Td>
-      <Table.Td className="truncate">{data.nama_pasien}</Table.Td>
-      <Table.Td className="truncate">{data.sampai}</Table.Td>
-      <Table.Td className="truncate">{data.mulai}</Table.Td>
-      <Table.Td className="truncate flex flex-col gap-1 ">
+      <Table.Td className="truncate max-w-[40px] lg:max-w-[100%] overflow-hidden whitespace-nowrap">
+        {data.no_surat}
+      </Table.Td>
+      <Table.Td className="truncate max-w-[110px] lg:max-w-[100%] overflow-hidden whitespace-nowrap">
+        {data.nama_pasien}
+      </Table.Td>
+      <Table.Td className="truncate max-w-[90px] lg:max-w-[100%] overflow-hidden whitespace-nowrap">
+        {data.sampai}
+      </Table.Td>
+      <Table.Td className="truncate max-w-[90px] lg:max-w-[100%] overflow-hidden whitespace-nowrap">
+        {data.mulai}
+      </Table.Td>
+      <Table.Td className=" truncate max-w-[70px] lg:max-w-[100%] overflow-hidden whitespace-nowrap flex flex-col gap-1 ">
         <button
           className="flex items-center gap-1 bg-[#007bff] hover:bg-sky-500 text-white rounded px-2 py-1 lg:py-2 text-[.5rem] lg:text-base hover:cursor-pointer"
           onClick={() => {}}
         >
           <IconFileDescription size={isSmallScreen ? 13 : 18} />
-          <span className="text-[.7rem] lg:text-base">Detail</span>
+          <span className="text-[.5rem] lg:text-base">Detail</span>
         </button>
 
         <button
@@ -223,32 +241,34 @@ const TableDataSalamMedika = () => {
           }}
         >
           <IconPrinter size={isSmallScreen ? 13 : 18} />
-          <span className="text-[.7rem] lg:text-base">Cetak Surat</span>
+          <span className="text-[.5rem] lg:text-base">Cetak Surat</span>
         </button>
 
         <button
-          className="flex items-center gap-1 bg-[#dc3545] hover:bg-red-500 text-white rounded px-2 py-1 g:py-2 text-[.5rem] lg:text-base hover:cursor-pointer"
+          className={`flex items-center gap-1 bg-[#dc3545] hover:bg-red-500 text-white rounded px-2 py-1 g:py-2 text-[.5rem] lg:text-base hover:cursor-pointer ${
+            userRole === "admin" ? "block" : "hidden"
+          }`}
           onClick={() => {
             handleDelete(data.id);
           }}
         >
           <IconTrash size={isSmallScreen ? 13 : 18} />
-          <span className="text-[.7rem] lg:text-base">Delete</span>
+          <span className="text-[.5rem] lg:text-base">Delete</span>
         </button>
       </Table.Td>
     </Table.Tr>
   ));
 
   return (
-    <ScrollArea className="">
+    <ScrollArea w="100%" h="100%" className="">
       <Table stickyHeader>
-        <Table.Thead className="text-[.7rem] lg:text-base">
+        <Table.Thead className="text-[.6rem] lg:text-base">
           <Table.Tr>
-            <Table.Th className="w-[20%] ">No Surat</Table.Th>
-            <Table.Th className="w-[40%] ">Nama Pasien</Table.Th>
-            <Table.Th className="w-[15%] ">Mulai</Table.Th>
-            <Table.Th className="w-[15%] ">Sampai</Table.Th>
-            <Table.Th className=" ">Action</Table.Th>
+            <Table.Th className="w-[20%] text-center">No Surat</Table.Th>
+            <Table.Th className="w-[40%] text-center">Nama Pasien</Table.Th>
+            <Table.Th className="w-[15%] text-center">Mulai</Table.Th>
+            <Table.Th className="w-[15%] text-center">Sampai</Table.Th>
+            <Table.Th className="">Action</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody className="text-[.6rem] lg:text-sm">{rows}</Table.Tbody>

@@ -1,12 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Table, Button } from "@mantine/core";
+import { Table } from "@mantine/core";
 import axios from "axios";
 import { IconPencilCode, IconTrash } from "@tabler/icons-react";
 import Swal from "sweetalert2";
 import { ScrollArea } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import Cookies from "js-cookie";
+import useUserStore from "@/state/zustand/store/userStore";
 const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 interface Dokter {
@@ -21,6 +22,7 @@ interface Dokter {
 
 const TableDokters = () => {
   const token = Cookies.get("token");
+  const userRole = useUserStore((state) => state.role);
 
   const [dokters, setDokters] = useState<Dokter[]>([]);
 
@@ -129,12 +131,20 @@ const TableDokters = () => {
 
   const rows = dokters.map((element) => (
     <Table.Tr key={element.id} className="">
-      <Table.Td className="truncate">{element.nip}</Table.Td>
-      <Table.Td className="truncate">{element.nama}</Table.Td>
-      <Table.Td className="truncate">{element.status}</Table.Td>
-      <Table.Td className="flex flex-row gap-2">
+      <Table.Td className="truncate max-w-[110px] overflow-hidden whitespace-nowrap">
+        {element.nip}
+      </Table.Td>
+      <Table.Td className="truncate max-w-[110px] overflow-hidden whitespace-nowrap">
+        {element.nama}
+      </Table.Td>
+      <Table.Td className="truncate max-w-[110px] overflow-hidden whitespace-nowrap">
+        {element.status}
+      </Table.Td>
+      <Table.Td className={`flex flex-row gap-2 `}>
         <button
-          className="flex items-center gap-1 bg-[#007bff] text-white rounded px-2 py-1 text-[.5rem] lg:text-base"
+          className={`flex items-center gap-1 bg-[#007bff] text-white rounded px-2 py-1 text-[.5rem] lg:text-base ${
+            userRole === "admin" ? "block" : "hidden"
+          }`}
           onClick={() => {}}
         >
           <IconPencilCode size={isSmallScreen ? 13 : 18} />
@@ -142,7 +152,9 @@ const TableDokters = () => {
         </button>
 
         <button
-          className="flex items-center gap-1 bg-[#dc3545] text-white rounded px-2 py-1 text-[.5rem] lg:text-base"
+          className={`flex items-center gap-1 bg-[#dc3545] text-white rounded px-2 py-1 text-[.5rem] lg:text-base ${
+            userRole === "admin" ? "block" : "hidden"
+          }`}
           onClick={() => {
             handleDelete(element.id);
           }}
@@ -156,17 +168,17 @@ const TableDokters = () => {
 
   return (
     <ScrollArea w="100%" h="100%" className="">
-      <Table
-        stickyHeader
-        // stickyHeaderOffset={60}
-        striped
-      >
-        <Table.Thead className="text-[.8rem] lg:text-base">
+      <Table stickyHeader width={"80%"} striped>
+        <Table.Thead className="text-[.7rem] lg:text-base">
           <Table.Tr>
             <Table.Th className="w-[35%] lg:w-[25%] ">NIP</Table.Th>
             <Table.Th className="w-[40%] lg:w-[50%] ">Nama</Table.Th>
             <Table.Th className="w-[10%] ">Status</Table.Th>
-            <Table.Th className="w-[15%] ">Action</Table.Th>
+            <Table.Th
+              className={`w-[15%] ${userRole === "admin" ? "block" : "hidden"}`}
+            >
+              Action
+            </Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody className="text-[.6rem] lg:text-sm">{rows}</Table.Tbody>

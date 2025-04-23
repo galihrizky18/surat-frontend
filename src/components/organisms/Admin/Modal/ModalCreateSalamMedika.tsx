@@ -193,15 +193,14 @@ const ModalCreateSalamMedika = () => {
 
                 <div className="flex flex-col text-[.8rem] lg:text-sm w-full">
                   <label htmlFor="">Tanggal Lahir</label>
+
                   <DateInput
                     value={tglLahir}
-                    onChange={(date) => {
-                      setTglLahir(date);
-                    }}
+                    onChange={setTglLahir}
                     placeholder="Tanggal Lahir"
                     clearable
+                    defaultValue={new Date()}
                     size={isSmallScreen ? "xs" : "sm"}
-                    readOnly
                   />
                 </div>
               </div>
@@ -265,7 +264,7 @@ const ModalCreateSalamMedika = () => {
             </div>
 
             {/* ===SECTION 2=== */}
-            <div className="flex flex-col gap-2 w-full lg:w-[50%]">
+            <div className="flex flex-col gap-2 w-full mt-2 lg:w-[50%]">
               {/* Diagnosa */}
               <div className="flex flex-col text-[.8rem] lg:text-sm">
                 <label htmlFor="">Diagnosa</label>
@@ -284,15 +283,13 @@ const ModalCreateSalamMedika = () => {
                 {/* Mulai Dari */}
                 <div className="flex flex-col text-[.8rem] lg:text-sm w-full">
                   <label htmlFor="">Mulai Dari</label>
+
                   <DateInput
                     value={mulaiDari}
-                    onChange={(date) => {
-                      setMulaiDari(date);
-                    }}
-                    placeholder="Mulai Dari"
+                    onChange={setMulaiDari}
+                    placeholder="Tanggal Lahir"
                     clearable
                     defaultValue={new Date()}
-                    readOnly
                     size={isSmallScreen ? "xs" : "sm"}
                   />
                 </div>
@@ -308,7 +305,6 @@ const ModalCreateSalamMedika = () => {
                     placeholder="Sampai"
                     clearable
                     defaultValue={new Date()}
-                    readOnly
                     size={isSmallScreen ? "xs" : "sm"}
                   />
                 </div>

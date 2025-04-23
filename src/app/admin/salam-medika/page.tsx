@@ -1,3 +1,4 @@
+"use client";
 import AdminTemplate from "@/components/template/AdminTemplate";
 import React from "react";
 

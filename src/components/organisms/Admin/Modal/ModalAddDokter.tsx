@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconFolderPlus } from "@tabler/icons-react";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button, Input, InputBase } from "@mantine/core";
@@ -8,6 +8,7 @@ import { DateInput } from "@mantine/dates";
 import axios, { AxiosResponse } from "axios";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import useUserStore from "@/state/zustand/store/userStore";
 
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -15,6 +16,8 @@ const apiHost = process.env.NEXT_PUBLIC_API_HOST;
 
 const ModalAddDokter = () => {
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
+  const userRole = useUserStore((state) => state.role);
+  const userid = useUserStore((state) => state.userId);
 
   const [opened, { open, close }] = useDisclosure(false);
   const [tglLahir, setTglLahir] = useState<Date | null>(null);
@@ -77,7 +80,9 @@ const ModalAddDokter = () => {
   return (
     <>
       <button
-        className="flex flex-row items-center gap-2 bg-[#28a745] text-white px-2 lg:px-4  py-1 lg:py-2 rounded-sm shadow-md hover:bg-green-500 transition duration-200 ease-in-out "
+        className={`flex flex-row items-center gap-2 bg-[#28a745] text-white px-2 lg:px-4  py-1 lg:py-2 rounded-sm shadow-md hover:bg-green-500 transition duration-200 ease-in-out ${
+          userRole === "admin" ? "block" : "hidden"
+        }`}
         onClick={open}
       >
         <IconFolderPlus size={18} />

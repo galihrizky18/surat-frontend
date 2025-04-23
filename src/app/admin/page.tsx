@@ -7,9 +7,12 @@ import iconStetoskop from "@/assets/icons/card-stetskop.svg";
 import iconSurat from "@/assets/icons/card-surat.svg";
 import axios from "axios";
 import Cookies from "js-cookie";
+import useUserStore from "@/state/zustand/store/userStore";
 
 const page = () => {
   const token = Cookies.get("token");
+
+  const role = useUserStore((state) => state.role);
 
   const [dokterCount, setDokterCount] = useState<number>(0);
   const [salamCount, setSalamCount] = useState<number>(0);
@@ -26,7 +29,6 @@ const page = () => {
             },
           })
           .then((res) => {
-            console.log("Response:", res.data);
             setDokterCount(res?.data?.data?.dokter);
             setSalamCount(res?.data?.data?.surat);
           });
@@ -67,6 +69,7 @@ const page = () => {
 
         <div className="bg-white rounded-md shadow-lg px-3 py-2 text-xs lg:text-lg ">
           Main
+          <p>Role saat ini: {role || "belum diset"}</p>
         </div>
       </div>
     </AdminTemplate>

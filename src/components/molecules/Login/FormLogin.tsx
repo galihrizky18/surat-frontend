@@ -11,9 +11,17 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import useUserStore from "@/state/zustand/store/userStore";
 
 const FormLogin = () => {
   const router = useRouter();
+
+  const setUserId = useUserStore((state) => state.setUserID);
+  const setRole = useUserStore((state) => state.setRole);
+
+  useEffect(() => {
+    setRole("admin");
+  }, []);
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -37,6 +45,15 @@ const FormLogin = () => {
     );
 
   const handleSubmit = async () => {
+    if (username === "" || password === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Oops... Gagal Login",
+        text: "Username dan Password tidak boleh kosong",
+      });
+      return;
+    }
+
     Swal.fire({
       title: "Proses Login",
       text: "Harap Bersabar 😘",
@@ -57,13 +74,15 @@ const FormLogin = () => {
         }
       );
 
-      const { success, token, message, userLogin } = response.data;
+      const { success, token, message, userLogin, role } = response.data;
 
       if (success) {
         if (token) {
           Cookies.set("token", token);
           Cookies.set("user", userLogin);
-          window.location.href = "/admin";
+          setUserId(userLogin);
+          setRole(role);
+          router.push("/admin");
         } else {
           Swal.fire({
             icon: "error",
@@ -81,7 +100,7 @@ const FormLogin = () => {
       if (axios.isAxiosError(error)) {
         Swal.fire({
           icon: "error",
-          title: "Oops... Ada Masalah Pada Server",
+          title: "Oops... Gagal Login",
           text: error.response?.data?.message,
         });
       } else {

@@ -4,10 +4,11 @@ import { Popover, Avatar } from "@mantine/core";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useMediaQuery } from "@mantine/hooks";
+import useUserStore from "@/state/zustand/store/userStore";
 
 const UserAvatar = () => {
   const router = useRouter();
-
+  const userId = useUserStore((state) => state.userId);
   const isSmallScreen = useMediaQuery("(max-width: 640px)");
 
   const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,13 +35,17 @@ const UserAvatar = () => {
           />
         </button>
       </Popover.Target>
-      <Popover.Dropdown className="flex flex-col gap-1 text-xs lg:text-lg ">
-        <button className="text-left px-1 lg:px-2 py-1 cursor-pointer hover:font-bold hover:bg-gray-100 ">
+      <Popover.Dropdown className="flex flex-col gap-1 px-1 lg:px-2 py-1 text-xs lg:text-lg gap-2  ">
+        <div className=" text-black font-bold pb-2 border-b-2">
+          {userId === "" ? "Users" : userId}
+        </div>
+
+        <button className="text-left   cursor-pointer hover:font-bold hover:bg-gray-100 ">
           Profile
         </button>
         <button
           onClick={handleLogout}
-          className="text-left px-1 lg:px-2 py-1 cursor-pointer hover:font-bold hover:bg-gray-100"
+          className="text-left  ursor-pointer hover:font-bold hover:bg-gray-100"
         >
           Keluar
         </button>

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+const projectHost = process.env.NEXT_PUBLIC_HOST;
 
 export default function Home() {
   return (
@@ -7,7 +8,7 @@ export default function Home() {
       <h1>Dashboard</h1>
 
       <Link
-        href={"http://192.168.1.7:3000/login"}
+        href={`${projectHost}/login`}
         className="bg-blue-600 text-white px-10 py-2 w-20"
       >
         Login
